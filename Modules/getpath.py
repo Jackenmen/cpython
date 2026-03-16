@@ -221,6 +221,7 @@ def search_up(prefix, *landmarks, test=isfile):
 program_name = config.get('program_name')
 home = config.get('home')
 executable = config.get('executable')
+warn('1. ' + (executable or ''))
 base_executable = config.get('base_executable')
 prefix = config.get('prefix')
 exec_prefix = config.get('exec_prefix')
@@ -264,15 +265,18 @@ if py_setpath:
     # the real executable path.
     if not executable:
         executable = real_executable
+        warn('2. ' + (executable or ''))
 
 if not executable and SEP in program_name:
     # Resolve partial path program_name against current directory
     executable = abspath(program_name)
+    warn('3. ' + (executable or ''))
 
 if not executable:
     # All platforms default to real_executable if known at this
     # stage. POSIX does not set this value.
     executable = real_executable
+    warn('4. ' + (executable or ''))
 elif os_name == 'darwin':
     # QUIRK: On macOS we may know the real executable path, but
     # if our caller has lied to us about it (e.g. most of
@@ -289,6 +293,7 @@ if not executable and program_name and ENV_PATH:
         p = joinpath(p, program_name)
         if isxfile(p):
             executable = p
+            warn('5. ' + (executable or ''))
             break
 
 if not executable:
@@ -300,6 +305,7 @@ if not executable:
     # Also need to set this fallback in case we are running from a
     # build directory with an invalid argv0 (i.e. test_sys.test_executable)
     real_executable_dir = executable_dir
+    warn('6. ' + (executable or ''))
 
 if ENV_PYTHONEXECUTABLE or ENV___PYVENV_LAUNCHER__:
     # If set, these variables imply that we should be using them as
@@ -323,6 +329,7 @@ if ENV_PYTHONEXECUTABLE or ENV___PYVENV_LAUNCHER__:
         #real_executable_dir = dirname(real_executable)
     executable = ENV_PYTHONEXECUTABLE or ENV___PYVENV_LAUNCHER__
     executable_dir = dirname(executable)
+    warn('7. ' + (executable or ''))
 
 
 # ******************************************************************************
