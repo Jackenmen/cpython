@@ -2320,17 +2320,25 @@ test: all
 # Similar to test, but also runs GUI tests.
 ci: all
 	PYTHONDEBUGPATH=1 $(TESTPYTHON) -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 	PYTHONDEBUGPATH=1 $(TESTPYTHON) -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 	PYTHONDEBUGPATH=1 $(TESTPYTHON) -m venv .venv
 
 	PYTHONDEBUGPATH=1 .venv/bin/python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 	PYTHONDEBUGPATH=1 .venv/bin/python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 
 	PYTHONDEBUGPATH=1 PATH="$$(realpath .venv/bin):$${PATH}" python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 	PYTHONDEBUGPATH=1 PATH="$$(realpath .venv/bin):$${PATH}" python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 
 	. .venv/bin/activate && PYTHONDEBUGPATH=1 .venv/bin/python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 	. .venv/bin/activate && PYTHONDEBUGPATH=1 .venv/bin/python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
 
 	rm -fr .venv
 

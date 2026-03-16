@@ -94,36 +94,11 @@ echo on
 .venv\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 .venv\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 
-call :getAbsolutePath _venv_scripts .venv\Scripts
-set "PATH=%_venv_scripts%;%PATH%"
+@call :getAbsolutePath _venv_scripts .venv\Scripts
+@set "PATH=%_venv_scripts%;%PATH%"
 python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-set "PATH=%_old_path%"
-
-call .venv\Scripts\activate.bat
-@echo on
-python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-call .venv\Scripts\deactivate.bat
-@echo on
-
-cmd /c del .venv\Scripts\python.exe
-cmd /c mklink .venv\Scripts\python.exe "%exe%"
-
-.venv\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-.venv\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-
-set "PATH=%_venv_scripts%;%PATH%"
-python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-set "PATH=%_old_path%"
-
-call .venv\Scripts\activate.bat
-@echo on
-python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-call .venv\Scripts\deactivate.bat
-@echo on
+@set "PATH=%_old_path%"
 
 rmdir /S /Q .venv
 
