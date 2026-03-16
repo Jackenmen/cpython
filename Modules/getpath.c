@@ -935,6 +935,7 @@ _PyConfig_InitPathConfig(PyConfig *config, int compute_path_config)
         !decode_to_dict(dict, "PYWINVER", PYWINVER) ||
         !wchar_to_dict(dict, "EXE_SUFFIX", EXE_SUFFIX) ||
         !env_to_dict(dict, "ENV_PATH", 0) ||
+        !env_to_dict(dict, "ENV_PYTHONDEBUGPATH", 0) ||
         !env_to_dict(dict, "ENV_PYTHONHOME", 0) ||
         !env_to_dict(dict, "ENV_PYTHONEXECUTABLE", 0) ||
         !env_to_dict(dict, "ENV___PYVENV_LAUNCHER__", 1) ||

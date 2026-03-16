@@ -70,6 +70,10 @@ echo About to run again without deleting .pyc first:
 pause
 goto Qmode
 
+:getAbsolutePath <returnVar> <filename>
+set "%1=%~f2"
+exit /b
+
 :SetPlatform
 if /I %1 EQU Win32 (set prefix=%pcbuild%win32) & exit /B 0
 if /I %1 EQU x64 (set prefix=%pcbuild%amd64) & exit /B 0
@@ -79,5 +83,50 @@ echo Invalid platform "%1"
 exit /B 1
 
 :Qmode
+set "_old_path=%PATH%"
+set PYTHONDEBUGPATH=1
 echo on
+"%exe%" %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+"%exe%" %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+
+"%exe%" %dashO% -m venv .venv
+
+.venv\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+.venv\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+
+call :getAbsolutePath _venv_scripts .venv\Scripts
+set "PATH=%_venv_scripts%;%PATH%"
+python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+set "PATH=%_old_path%"
+
+call .venv\Scripts\activate.bat
+@echo on
+python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+call .venv\Scripts\deactivate.bat
+@echo on
+
+cmd /c del .venv\Scripts\python.exe
+cmd /c mklink .venv\Scripts\python.exe "%exe%"
+
+.venv\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+.venv\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+
+set "PATH=%_venv_scripts%;%PATH%"
+python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+set "PATH=%_old_path%"
+
+call .venv\Scripts\activate.bat
+@echo on
+python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+call .venv\Scripts\deactivate.bat
+@echo on
+
+rmdir /S /Q .venv
+
+set PYTHONDEBUGPATH=
+
 %cmd%
