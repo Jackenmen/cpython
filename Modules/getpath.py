@@ -336,7 +336,7 @@ if ENV_PYTHONEXECUTABLE or ENV___PYVENV_LAUNCHER__:
     executable = ENV_PYTHONEXECUTABLE or ENV___PYVENV_LAUNCHER__
     executable_dir = dirname(executable)
     if ENV_PYTHONDEBUGPATH:
-        warn('7. ' + (executable or ''))
+        warn('7. ' + f'{executable=} {ENV_PYTHONEXECUTABLE=} {ENV___PYVENV_LAUNCHER__=}')
 
 
 # ******************************************************************************
