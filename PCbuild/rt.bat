@@ -70,6 +70,10 @@ echo About to run again without deleting .pyc first:
 pause
 goto Qmode
 
+:getAbsolutePath <returnVar> <filename>
+set "%1=%~f2"
+exit /b
+
 :SetPlatform
 if /I %1 EQU Win32 (set prefix=%pcbuild%win32) & exit /B 0
 if /I %1 EQU x64 (set prefix=%pcbuild%amd64) & exit /B 0
@@ -79,5 +83,37 @@ echo Invalid platform "%1"
 exit /B 1
 
 :Qmode
+set "_old_path=%PATH%"
+set PYTHONDEBUGPATH=1
 echo on
+"%exe%" %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+"%exe%" %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+
+"%exe%" %dashO% -m venv --copies .venv1
+
+.venv1\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+.venv1\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+
+@call :getAbsolutePath _venv1_scripts .venv1\Scripts
+@set "PATH=%_venv1_scripts%;%PATH%"
+python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+@set "PATH=%_old_path%"
+
+"%exe%" %dashO% -m venv --symlinks .venv2
+
+.venv2\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+.venv2\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+
+@call :getAbsolutePath _venv2_scripts .venv2\Scripts
+@set "PATH=%_venv2_scripts%;%PATH%"
+python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+@set "PATH=%_old_path%"
+
+rmdir /S /Q .venv1
+rmdir /S /Q .venv2
+
+set PYTHONDEBUGPATH=
+
 %cmd%

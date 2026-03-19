@@ -2319,6 +2319,48 @@ test: all
 # This excludes some tests that are particularly resource-intensive.
 # Similar to test, but also runs GUI tests.
 ci: all
+	PYTHONDEBUGPATH=1 $(TESTPYTHON) -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+	PYTHONDEBUGPATH=1 $(TESTPYTHON) -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+
+	PYTHONDEBUGPATH=1 $(TESTPYTHON) -m venv --copies .venv1
+
+	PYTHONDEBUGPATH=1 .venv1/bin/python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+	PYTHONDEBUGPATH=1 .venv1/bin/python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+
+	PYTHONDEBUGPATH=1 PATH="$$(realpath .venv1/bin):$${PATH}" python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+	PYTHONDEBUGPATH=1 PATH="$$(realpath .venv1/bin):$${PATH}" python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+
+	. .venv1/bin/activate && PYTHONDEBUGPATH=1 python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+	. .venv1/bin/activate && PYTHONDEBUGPATH=1 python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+
+	PYTHONDEBUGPATH=1 $(TESTPYTHON) -m venv --symlinks .venv2
+
+	PYTHONDEBUGPATH=1 .venv2/bin/python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+	PYTHONDEBUGPATH=1 .venv2/bin/python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+
+	PYTHONDEBUGPATH=1 PATH="$$(realpath .venv2/bin):$${PATH}" python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+	PYTHONDEBUGPATH=1 PATH="$$(realpath .venv2/bin):$${PATH}" python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+
+	. .venv2/bin/activate && PYTHONDEBUGPATH=1 python -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+	. .venv2/bin/activate && PYTHONDEBUGPATH=1 python -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+	@echo
+
+	rm -fr .venv1
+	rm -fr .venv2
+
 	$(TESTRUNNER) --fast-ci --timeout=$(TESTTIMEOUT) $(TESTOPTS)
 
 # Run the test suite for both architectures in a Universal build on OSX.
