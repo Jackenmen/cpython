@@ -41,6 +41,11 @@ jobs:
       shell: bash
     - name: Display build info
       run: .\\python.bat -m test.pythoninfo
+    - name: Upload artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: python_${{ inputs.arch }}_${{ inputs.free-threading }}
+        path: PCbuild\amd64\
     - name: Tests
       run: >-
         .\\PCbuild\\rt.bat
