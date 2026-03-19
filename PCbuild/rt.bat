@@ -89,18 +89,30 @@ echo on
 "%exe%" %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 "%exe%" %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 
-"%exe%" %dashO% -m venv .venv
+"%exe%" %dashO% -m venv --copies .venv1
 
-.venv\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
-.venv\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+.venv1\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+.venv1\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 
-@call :getAbsolutePath _venv_scripts .venv\Scripts
-@set "PATH=%_venv_scripts%;%PATH%"
+@call :getAbsolutePath _venv1_scripts .venv1\Scripts
+@set "PATH=%_venv1_scripts%;%PATH%"
 python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
 @set "PATH=%_old_path%"
 
-rmdir /S /Q .venv
+"%exe%" %dashO% -m venv --symlinks .venv2
+
+.venv2\Scripts\python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+.venv2\Scripts\python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+
+@call :getAbsolutePath _venv2_scripts .venv2\Scripts
+@set "PATH=%_venv2_scripts%;%PATH%"
+python.exe %dashO% -c "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+python.exe %dashO% -Sc "import sys; print(f'{sys.executable=} {sys._base_executable=} {sys.prefix=} {sys.base_prefix=}')"
+@set "PATH=%_old_path%"
+
+rmdir /S /Q .venv1
+rmdir /S /Q .venv2
 
 set PYTHONDEBUGPATH=
 
